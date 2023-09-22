@@ -15,6 +15,9 @@ class World():
         #Definindo Game Over
         self.game_over = 0
         
+        #Definindo atributos para controlar o menu
+        self.menu = True
+        
         #Definindo um grupo  -> semelhante a uma lista no pygame
         #É útil, pois um jogo lida com várias quantidades de inimigos, por exemplo. Ter um grupo faz com que você possa modificar todos de vez
         self.enemy_group = pygame.sprite.Group()
