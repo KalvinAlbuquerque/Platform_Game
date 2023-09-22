@@ -1,4 +1,6 @@
 import pygame
+from world import World
+
 
 class Player():
     
@@ -30,6 +32,8 @@ class Player():
         self.rect = self.imagem.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.alturaJogador = self.imagem.get_height()
+        self.larguraJogador = self.imagem.get_width()
         
         #Atributos relacionados à gravidade ao pular
         self.gravidade = 0
@@ -37,7 +41,7 @@ class Player():
         
         
     #Função que atualiza o jogador e suas características conforme o input do usuário
-    def update(self, tela, alturaTela, LarguraTela):
+    def update(self, tela, alturaTela, LarguraTela, world):
         
         deltaX = 0
         deltaY = 0 
@@ -92,7 +96,31 @@ class Player():
             self.gravidade =10
         deltaY += self.gravidade
         
-        #Checando colisões
+        #Checando colisões (antes delas acontecerem)
+        for bloco in world.listaBlocos:
+            
+            #Checando colisão no eixo x
+            #Se ele colidiu com algo no eixo x, basta impedi-lo de seguir adiante
+            if bloco[1].colliderect(self.rect.x + deltaX, self.rect.y, self.larguraJogador, self.alturaJogador):
+                deltaX = 0 
+            
+            #Checando colisão no eixo y 
+            if bloco[1].colliderect(self.rect.x, self.rect.y + deltaY, self.larguraJogador, self.alturaJogador):
+                
+                #Checando se ele está embaixo de algum bloco ( se ele está pulando)
+                #Se a gravidade for negativa quer dizer que ele está subindo(pulando
+                #Caso ele se mova mais do que deveria e "bata" com a cabeça em um bloco, estou calculando a distância entre a cabeça do jogador e a parte
+                #de baixo do bloco com o qual ele irá colidir. Desta forma, o jogador irá se mover somente até essa parte de baixo do bloco.
+                if self.gravidade < 0:
+                    deltaY = bloco[1].bottom - self.rect.top
+                    self.gravidade = 0
+                    
+                #De mesmo modo, estou checando se ele está acima de algum bloco. 
+                elif self.gravidade >= 0:
+                    deltaY = bloco[1].top - self.rect.bottom
+                    self.gravidade = 0
+                    
+            
         
         #Atualizando as coordenadas do jogador (movimentando-o)
         self.rect.x += deltaX

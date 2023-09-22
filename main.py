@@ -27,7 +27,7 @@ while True:
     screen.define_clock(fps=500)
     
     world.draw(screen.tela)
-    player.update(screen.tela, screen.tela.get_height(), screen.tela.get_width())
+    player.update(screen.tela, screen.tela.get_height(), screen.tela.get_width(), world)
     
     #Verificando qualquer entrada(evento) para manter a interatividade do programa
     for event in pygame.event.get():
