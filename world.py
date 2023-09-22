@@ -3,10 +3,22 @@ import pygame
 from pygame.locals import * 
 from sys import exit
 
+from enemy import Enemy
+from lava import Lava
+
+
 class World():
     
     #Construtor
     def __init__(self, tamanhoBloco):
+        
+        #Definindo Game Over
+        self.game_over = 0
+        
+        #Definindo um grupo  -> semelhante a uma lista no pygame
+        #É útil, pois um jogo lida com várias quantidades de inimigos, por exemplo. Ter um grupo faz com que você possa modificar todos de vez
+        self.enemy_group = pygame.sprite.Group()
+        self.lava_group = pygame.sprite.Group()
         
         #Definindo atributos
         self.listaBlocos = []
@@ -79,7 +91,14 @@ class World():
                     
                     #Adicionando o bloco à lista
                     self.listaBlocos.append(bloco)
+                
+                if bloco == 3:
+                    enemy = Enemy(contadorColunas * self.tamanhoBloco, (contadorLinhas * self.tamanhoBloco) +15)
+                    self.enemy_group.add(enemy)
                     
+                if bloco == 6:
+                    lava =  Lava(contadorColunas * self.tamanhoBloco, (contadorLinhas * self.tamanhoBloco) + (tamanhoBloco//2), self.tamanhoBloco)
+                    self.lava_group.add(lava)
                     
                 contadorColunas = contadorColunas +1
             contadorLinhas = contadorLinhas +1

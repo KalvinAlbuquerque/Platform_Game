@@ -10,9 +10,11 @@ from screen import Screen
 
 #Inicializando as classes necessárias 
 pygame.init()
+
 screen = Screen(alturaTela=1000,larguraTela=1000)
 player = Player(x=100, y=screen.tela.get_height() - 130)
 world = World(tamanhoBloco=50)
+
 
 #Sysfont(Formato da fonte, tamanho do texto, negrito ou não, itálico ou não)
 fonte = pygame.font.SysFont('arial', 40, True, True)
@@ -27,7 +29,13 @@ while True:
     screen.define_clock(fps=500)
     
     world.draw(screen.tela)
-    player.update(screen.tela, screen.tela.get_height(), screen.tela.get_width(), world)
+    world.enemy_group.draw(screen.tela)
+    
+    if world.game_over == 0:
+        world.enemy_group.update()
+    world.lava_group.draw(screen.tela)
+    
+    player.update(screen.tela, world)
     
     #Verificando qualquer entrada(evento) para manter a interatividade do programa
     for event in pygame.event.get():
