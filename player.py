@@ -4,8 +4,13 @@ from world import World
 
 class Player():
     
+    #Construtor
     def __init__(self, x, y):
+        self.reset(x,y)
         
+    #Função que reseta todas as variáveis e atributos da classe player
+    #É chamada no construtor para facilitar quando ocorrer um game over e o usuário desejar reiniciar o jogo
+    def reset(self, x,y):
         #Definindo atributos:
         
         self.game_over = 0
@@ -39,9 +44,12 @@ class Player():
         #Atributos relacionados à gravidade ao pular
         self.gravidade = 0
         self.jumped = False
+        self.in_air = True
         
         #Atributos relacionados à morte do jogador:
         self.deadImage = pygame.image.load('img/ghost.png')
+        
+        
         
         
     #Função que atualiza o jogador e suas características conforme o input do usuário
@@ -56,7 +64,7 @@ class Player():
             #Recebendo os inputs para movimentar o player
             tecla = pygame.key.get_pressed()
             
-            if tecla[pygame.K_SPACE] and self.jumped == False and self.gravidade == 0 :
+            if tecla[pygame.K_SPACE] and self.jumped == False and self.in_air == False:
                 self.gravidade = -15
                 self.jumped = True
             if tecla[pygame.K_SPACE] == False: 
@@ -104,6 +112,7 @@ class Player():
             
             
             #Checando colisões (antes delas acontecerem)
+            self.in_air = True
             for bloco in world.listaBlocos:
                 
                 #Checando colisão no eixo x
@@ -126,6 +135,8 @@ class Player():
                     elif self.gravidade >= 0:
                         deltaY = bloco[1].top - self.rect.bottom
                         self.gravidade = 0
+                        #Se o jogador colidiu com a parte de cima de um bloco, ele não está flutuando
+                        self.in_air = False
             
             #Checando Game Over (Colisão com inimigos ou lava)
             #spritecollide(sprite1, sprite2, Se a sprite deve sumir após a colisão)
@@ -140,7 +151,7 @@ class Player():
             self.rect.x += deltaX
             self.rect.y += deltaY
         
-        elif world.game_over == -1:
+        elif world.game_over == -1: 
             self.imagem = self.deadImage
             self.rect.y -= 5
             
