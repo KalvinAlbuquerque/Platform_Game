@@ -13,7 +13,7 @@ from button import Button
 pygame.init()
 
 screen = Screen(alturaTela=1000,larguraTela=1000)
-player = Player(x=100, y=screen.tela.get_height() - 130, autoPlayerMode=True)
+player = Player(x=100, y=screen.tela.get_height() - 130)
 world = World(tamanhoBloco=50)
 
 #Criando botões 
@@ -75,7 +75,7 @@ while True:
             if autoPlayerMode_button_ON.draw(screen.tela):
                 player.autoPlayer.autoPlayerMode = False
                 
-                
+        #Desenhando e atualizando recursos de mundo
         world.draw(screen.tela)
         world.enemy_group.draw(screen.tela)
         world.enemy_group.update()

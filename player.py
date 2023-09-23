@@ -6,12 +6,12 @@ from autoplayer import AutoPlayer
 class Player():
     
     #Construtor
-    def __init__(self, x, y, autoPlayerMode):
-        self.reset(x,y,autoPlayerMode)
+    def __init__(self, x, y):
+        self.reset(x,y)
         
     #Função que reseta todas as variáveis e atributos da classe player
     #É chamada no construtor para facilitar quando ocorrer um game over e o usuário desejar reiniciar o jogo
-    def reset(self, x,y, autoPlayerMode):
+    def reset(self, x,y):
         #Definindo atributos:
         
         self.game_over = 0
@@ -51,7 +51,7 @@ class Player():
         self.deadImage = pygame.image.load('img/ghost.png')
         
         #Atributo que controla o autoplayer
-        self.autoPlayer = AutoPlayer(autoPlayerMode=autoPlayerMode)
+        self.autoPlayer = AutoPlayer()
         
     #Função que atualiza o jogador e suas características conforme o input do usuário
     def update(self, tela, world):

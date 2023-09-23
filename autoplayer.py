@@ -1,8 +1,8 @@
 class AutoPlayer():
     
-    def __init__(self,autoPlayerMode):
+    def __init__(self):
 
-        self.autoPlayerMode = autoPlayerMode
+        self.autoPlayerMode = False
         self.move_Right = False
         self.move_Left = False
         self.move_Right_Pixels = 0
