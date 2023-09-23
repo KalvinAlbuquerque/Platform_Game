@@ -21,15 +21,23 @@ world = World(tamanhoBloco=50)
 
 #Botão de restart
 restart_button = pygame.image.load('img/restart_btn.png')
-restart_button = Button((screen.tela.get_width()//2)-50 , (screen.tela.get_height()//2) +100, restart_button)
+restart_button = Button((screen.tela.get_width()//2), (screen.tela.get_height()//2), restart_button)
 
 #Botão de start 
 start_button = pygame.image.load('img/start_btn.png')
-start_button = Button((screen.tela.get_width()//2)-350 , (screen.tela.get_height()//2), start_button)
+start_button = Button((screen.tela.get_width()//2) - (world.tamanhoBloco * 8), (screen.tela.get_height()//2), start_button)
 
 #Botão de exit
 exit_button = pygame.image.load('img/exit_btn.png')
-exit_button = Button((screen.tela.get_width()//2)+150 , (screen.tela.get_height()//2) , exit_button)
+exit_button = Button((screen.tela.get_width()//2) + (world.tamanhoBloco* 3) , (screen.tela.get_height()//2) , exit_button)
+
+#Botões autoPlayerMode
+autoPlayerMode_button_OFF = pygame.image.load('img/autoPlayerModeOFF.png')
+autoPlayerMode_button_OFF = Button((screen.tela.get_width() - (world.tamanhoBloco * 3)), (screen.tela.get_height()//10) - (world.tamanhoBloco * 2), autoPlayerMode_button_OFF)
+
+autoPlayerMode_button_ON = pygame.image.load('img/autoPlayerModeON.png')
+autoPlayerMode_button_ON = Button((screen.tela.get_width() - (world.tamanhoBloco * 3)), (screen.tela.get_height()//10) - (world.tamanhoBloco * 2), autoPlayerMode_button_ON)
+
 
 
 
@@ -55,7 +63,19 @@ while True:
             world.menu = False
         if exit_button.draw(screen.tela):
             exit()
+            
     else:
+        
+        #Habilitando e desabilitando autoPlayerMode
+        if player.autoPlayer.autoPlayerMode == False:
+            if autoPlayerMode_button_OFF.draw(screen.tela):
+                player.autoPlayer.autoPlayerMode = True
+                
+        if player.autoPlayer.autoPlayerMode == True:
+            if autoPlayerMode_button_ON.draw(screen.tela):
+                player.autoPlayer.autoPlayerMode = False
+                
+                
         world.draw(screen.tela)
         world.enemy_group.draw(screen.tela)
         world.enemy_group.update()
