@@ -2,6 +2,7 @@
 import pygame
 from pygame.locals import * 
 from sys import exit
+import math
 
 #Importando bibliotecas locais
 from world import World
@@ -12,12 +13,16 @@ from button import Button
 #Inicializando as classes necessárias 
 pygame.init()
 
-screen = Screen(alturaTela=1000,larguraTela=1000)
-player = Player(x=100, y=screen.tela.get_height() - 130)
-world = World(tamanhoBloco=50)
+alturaTela = 680
+larguraTela = 680
+quantidadeBlocos = 400
+tamanhoBloco = math.sqrt((alturaTela * larguraTela)/quantidadeBlocos)
+
+screen = Screen(alturaTela=alturaTela,larguraTela=larguraTela)
+world = World(tamanhoBloco=tamanhoBloco)
+player = Player(x=100, y=screen.tela.get_height() - 130, world=world)
 
 #Criando botões 
-#TO DO: ver onde as imagens de fundo e dos botões irão ficar, ficar em screen não faz sentido e ficar metade/metade também não faz sentido
 
 #Botão de restart
 restart_button = pygame.image.load('img/restart_btn.png')
@@ -25,11 +30,11 @@ restart_button = Button((screen.tela.get_width()//2), (screen.tela.get_height()/
 
 #Botão de start 
 start_button = pygame.image.load('img/start_btn.png')
-start_button = Button((screen.tela.get_width()//2) - (world.tamanhoBloco * 8), (screen.tela.get_height()//2), start_button)
+start_button = Button((screen.tela.get_width()//2) - (world.tamanhoBloco * 9), (screen.tela.get_height()//2), start_button)
 
 #Botão de exit
 exit_button = pygame.image.load('img/exit_btn.png')
-exit_button = Button((screen.tela.get_width()//2) + (world.tamanhoBloco* 3) , (screen.tela.get_height()//2) , exit_button)
+exit_button = Button((screen.tela.get_width()//2) + (world.tamanhoBloco* 2) , (screen.tela.get_height()//2) , exit_button)
 
 #Botões autoPlayerMode
 autoPlayerMode_button_OFF = pygame.image.load('img/autoPlayerModeOFF.png')
@@ -39,23 +44,16 @@ autoPlayerMode_button_ON = pygame.image.load('img/autoPlayerModeON.png')
 autoPlayerMode_button_ON = Button((screen.tela.get_width() - (world.tamanhoBloco * 3)), (screen.tela.get_height()//10) - (world.tamanhoBloco * 2), autoPlayerMode_button_ON)
 
 
-
-
-#Sysfont(Formato da fonte, tamanho do texto, negrito ou não, itálico ou não)
-fonte = pygame.font.SysFont('arial', 40, True, True)
 pontos = False 
-  
-#Andar_para_Direita()
-#Andar_para_Direita()
-#pular()
 #Looping principal do jogo 
 while True:
 
     
     screen.update()
-    screen.draw_grid(world.tamanhoBloco)
     screen.define_clock(fps=500)
     
+    #Desenhando grade, pode comentar caso não queira que apareça
+    #screen.draw_grid(world.tamanhoBloco)
     
     #Printando menu de início
     if world.menu == True:

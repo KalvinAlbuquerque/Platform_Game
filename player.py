@@ -6,14 +6,19 @@ from autoplayer import AutoPlayer
 class Player():
     
     #Construtor
-    def __init__(self, x, y):
-        self.reset(x,y)
+    def __init__(self, x, y, world: World):
+        self.reset(x,y, world)
+        
+        self.autoPlayer = AutoPlayer()
+        
+        #Atributo que controla o autoplayer
         
     #Função que reseta todas as variáveis e atributos da classe player
     #É chamada no construtor para facilitar quando ocorrer um game over e o usuário desejar reiniciar o jogo
-    def reset(self, x,y):
+    def reset(self, x,y, world: World):
         #Definindo atributos:
         
+  
         self.game_over = 0
         #Atributos relacionados às sprites
         self.spritesDireita = []
@@ -26,7 +31,7 @@ class Player():
         #Carregando as imagens do jogador e redimensionando-as
         for num in range(1,5):
             spritesDireita = pygame.image.load(f'img/guy{num}.png')
-            spritesDireita = pygame.transform.scale(spritesDireita, (40,80))
+            spritesDireita = pygame.transform.scale(spritesDireita, (world.tamanhoBloco * 0.8, world.tamanhoBloco *2 * 0.8))
             self.spritesDireita.append(spritesDireita)
             
             #A função flip possibilita inverter as imagens. Então se as sprites estavam se movimentando para a direita, agora ela irá se movimenta para esquerda
@@ -50,11 +55,10 @@ class Player():
         #Atributos relacionados à morte do jogador:
         self.deadImage = pygame.image.load('img/ghost.png')
         
-        #Atributo que controla o autoplayer
-        self.autoPlayer = AutoPlayer()
+
         
     #Função que atualiza o jogador e suas características conforme o input do usuário
-    def update(self, tela, world):
+    def update(self, tela, world: World):
         
         if world.game_over == 0:
             
@@ -73,11 +77,11 @@ class Player():
                 if tecla[pygame.K_SPACE] == False: 
                     self.jumped = False
                 if tecla[pygame.K_LEFT]:
-                    deltaX -= 5
+                    deltaX -= world.tamanhoBloco * 0.1
                     self.contador += 1
                     self.direcao = -1
                 if tecla[pygame.K_RIGHT]:
-                    deltaX += 5
+                    deltaX += world.tamanhoBloco * 0.1
                     self.contador += 1
                     self.direcao = 1
                 
@@ -161,7 +165,7 @@ class Player():
         
         elif world.game_over == -1: 
             self.imagem = self.deadImage
-            self.rect.y -= 5
+            self.rect.y -= world.tamanhoBloco * 0.1
             
         #Desenhando o jogador
         #Lembre-se que blit pede a superfície/imagem que deseja printar e um retângulo ou uma tupla contendo as coordenadas (x,y) 
