@@ -13,7 +13,7 @@ from button import Button
 pygame.init()
 
 screen = Screen(alturaTela=1000,larguraTela=1000)
-player = Player(x=100, y=screen.tela.get_height() - 130)
+player = Player(x=100, y=screen.tela.get_height() - 130, autoPlayerMode=True)
 world = World(tamanhoBloco=50)
 
 #Criando botões 
@@ -35,15 +35,17 @@ exit_button = Button((screen.tela.get_width()//2)+150 , (screen.tela.get_height(
 
 #Sysfont(Formato da fonte, tamanho do texto, negrito ou não, itálico ou não)
 fonte = pygame.font.SysFont('arial', 40, True, True)
-pontos = 0 
+pontos = False 
   
-
+#Andar_para_Direita()
+#Andar_para_Direita()
+#pular()
 #Looping principal do jogo 
 while True:
 
     
     screen.update()
-    #screen.draw_grid(world.tamanhoBloco)
+    screen.draw_grid(world.tamanhoBloco)
     screen.define_clock(fps=500)
     
     
@@ -60,6 +62,10 @@ while True:
         world.lava_group.draw(screen.tela)
         
         player.update(screen.tela, world)
+        
+        if pontos == False:
+            player.autoPlayer.andar_Para_Direita()
+            pontos = True
         
         #Verificando ocorreu game over para printar opções    
         if world.game_over == -1:

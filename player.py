@@ -1,16 +1,17 @@
 import pygame
 from world import World
+from autoplayer import AutoPlayer
 
 
 class Player():
     
     #Construtor
-    def __init__(self, x, y):
-        self.reset(x,y)
+    def __init__(self, x, y, autoPlayerMode):
+        self.reset(x,y,autoPlayerMode)
         
     #Função que reseta todas as variáveis e atributos da classe player
     #É chamada no construtor para facilitar quando ocorrer um game over e o usuário desejar reiniciar o jogo
-    def reset(self, x,y):
+    def reset(self, x,y, autoPlayerMode):
         #Definindo atributos:
         
         self.game_over = 0
@@ -49,8 +50,8 @@ class Player():
         #Atributos relacionados à morte do jogador:
         self.deadImage = pygame.image.load('img/ghost.png')
         
-        
-        
+        #Atributo que controla o autoplayer
+        self.autoPlayer = AutoPlayer(autoPlayerMode=autoPlayerMode)
         
     #Função que atualiza o jogador e suas características conforme o input do usuário
     def update(self, tela, world):
@@ -61,33 +62,40 @@ class Player():
             deltaY = 0 
             walk_cooldown = 10
             
-            #Recebendo os inputs para movimentar o player
-            tecla = pygame.key.get_pressed()
-            
-            if tecla[pygame.K_SPACE] and self.jumped == False and self.in_air == False:
-                self.gravidade = -15
-                self.jumped = True
-            if tecla[pygame.K_SPACE] == False: 
-                self.jumped = False
-            if tecla[pygame.K_LEFT]:
-                deltaX -= 5
-                self.contador += 1
-                self.direcao = -1
-            if tecla[pygame.K_RIGHT]:
-                deltaX += 5
-                self.contador += 1
-                self.direcao = 1
-            
-            #Caso o usuário pare de apertar K_RIGHT ou K_LEFT, a sprite do jogador irá voltar para a padrão, para que ele não fique em uma sprite aleatória
-            if tecla[pygame.K_RIGHT] == False and tecla[pygame.K_LEFT] == False:
-                self.contador = 0
-                self.spriteID = 0 
-                if self.direcao == 1:
-                    self.imagem = self.spritesDireita[self.spriteID]
-                if self.direcao == -1:
-                    self.imagem = self.spritesEsquerda[self.spriteID]
-            
-            
+            #Controlando se o jogador irá se mover no modo automático ou pelas setas
+            if self.autoPlayer.autoPlayerMode == False:
+                #Recebendo os inputs para movimentar o player
+                tecla = pygame.key.get_pressed()
+                
+                if tecla[pygame.K_SPACE] and self.jumped == False and self.in_air == False:
+                    self.gravidade = -15
+                    self.jumped = True
+                if tecla[pygame.K_SPACE] == False: 
+                    self.jumped = False
+                if tecla[pygame.K_LEFT]:
+                    deltaX -= 5
+                    self.contador += 1
+                    self.direcao = -1
+                if tecla[pygame.K_RIGHT]:
+                    deltaX += 5
+                    self.contador += 1
+                    self.direcao = 1
+                
+                #Caso o usuário pare de apertar K_RIGHT ou K_LEFT, a sprite do jogador irá voltar para a padrão, para que ele não fique em uma sprite aleatória
+                if tecla[pygame.K_RIGHT] == False and tecla[pygame.K_LEFT] == False:
+                    self.contador = 0
+                    self.spriteID = 0 
+                    if self.direcao == 1:
+                        self.imagem = self.spritesDireita[self.spriteID]
+                    if self.direcao == -1:
+                        self.imagem = self.spritesEsquerda[self.spriteID]
+            else:
+                if self.autoPlayer.move_Right == True:
+                    deltaX += 50
+                    self.contador += 1
+                    self.direcao = 1
+                    self.autoPlayer.resetMoves()
+                    pygame.display.update()
             #Desenhando as animações do jogador
             if self.contador > walk_cooldown:
                 self.contador = 0 
