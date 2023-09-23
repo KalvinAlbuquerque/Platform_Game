@@ -1,19 +1,29 @@
 #Importando bibliotecas
 import pygame
 from pygame.locals import * 
-from sys import exit
+import pickle
+from os import path
 
 from enemy import Enemy
 from lava import Lava
+from gate import Gate
 
 
 class World():
     
     #Construtor
-    def __init__(self, tamanhoBloco):
+    def __init__(self, tamanhoBloco, tela):
         
         #Definindo Game Over
         self.game_over = 0
+        
+        #Definindo variável de controle de fases
+        self.level = 1
+        self.max_Levels = 3
+        
+        #Posição de inicio do player
+        self.posicaoInicialPlayerX = 40
+        self.posicaoInicialPlayerY = tela.get_height() - 130
         
         #Definindo atributos para controlar o menu
         self.menu = True
@@ -22,34 +32,19 @@ class World():
         #É útil, pois um jogo lida com várias quantidades de inimigos, por exemplo. Ter um grupo faz com que você possa modificar todos de vez
         self.enemy_group = pygame.sprite.Group()
         self.lava_group = pygame.sprite.Group()
+        self.gate_group = pygame.sprite.Group()
         
         #Definindo atributos
         self.listaBlocos = []
         self.tamanhoBloco = tamanhoBloco
         
-        #Definindo a matriz que irá ser convertida em blocos
-        self.matrizMundo = [
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-        [1, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0], 
-        [1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 2, 2, 0], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 7, 0, 5, 0, 0, 0, 0], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0], 
-        [1, 7, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 7, 0, 0, 0, 0, 0], 
-        [1, 0, 2, 0, 0, 7, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-        [1, 0, 0, 2, 0, 0, 4, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 0, 0, 0], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 7, 0, 0, 0, 0, 2, 0, 0], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 2, 2, 2, 2, 1], 
-        [1, 0, 0, 0, 0, 0, 2, 2, 2, 6, 6, 6, 6, 6, 1, 1, 1, 1, 1, 1], 
-        [1, 0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
-        [1, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
-        [1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        ]
+        #Lendo arquivo de fases e carregando-as para a memória
+        #open(Arquivo que irei ler, r = read, b = binary)
+        if path.exists(f'levels/level{self.level}_data'):
+            pickle_in = open(f'levels/level{self.level}_data', 'rb')
+            self.matrizMundo = pickle.load(pickle_in)
+        else: 
+            print('Fase não existe!')
 
         
         #Carregando imagens
@@ -96,13 +91,17 @@ class World():
                     self.listaBlocos.append(bloco)
                 
                 if bloco == 3:
-                    enemy = Enemy(contadorColunas * self.tamanhoBloco, (contadorLinhas * self.tamanhoBloco) +15)
+                    enemy = Enemy(contadorColunas * self.tamanhoBloco, (contadorLinhas * self.tamanhoBloco) + self.tamanhoBloco*0.3)
                     self.enemy_group.add(enemy)
                     
                 if bloco == 6:
                     lava =  Lava(contadorColunas * self.tamanhoBloco, (contadorLinhas * self.tamanhoBloco) + (tamanhoBloco//2), self.tamanhoBloco)
                     self.lava_group.add(lava)
-                    
+                
+                if bloco == 8:
+                    gate =  Gate(contadorColunas * self.tamanhoBloco, contadorLinhas * self.tamanhoBloco - (self.tamanhoBloco //2), self.tamanhoBloco)
+                    self.gate_group.add(gate)    
+                                    
                 contadorColunas = contadorColunas +1
             contadorLinhas = contadorLinhas +1
     
@@ -111,10 +110,3 @@ class World():
      
         for bloco in self.listaBlocos:
             tela.blit(bloco[0], bloco[1])
-
-                    
-                    
-                    
-                    
-                    
-        

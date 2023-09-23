@@ -2,20 +2,23 @@ import pygame
 from world import World
 from autoplayer import AutoPlayer
 
+import pickle
+from os import path
 
 class Player():
     
     #Construtor
     def __init__(self, x, y, world: World):
-        self.reset(x,y, world)
-        
-        self.autoPlayer = AutoPlayer()
         
         #Atributo que controla o autoplayer
+        self.autoPlayer = AutoPlayer()
+        self.world = world
+        
+        self.reset(x,y)
         
     #Função que reseta todas as variáveis e atributos da classe player
     #É chamada no construtor para facilitar quando ocorrer um game over e o usuário desejar reiniciar o jogo
-    def reset(self, x,y, world: World):
+    def reset(self, x,y):
         #Definindo atributos:
         
   
@@ -31,7 +34,7 @@ class Player():
         #Carregando as imagens do jogador e redimensionando-as
         for num in range(1,5):
             spritesDireita = pygame.image.load(f'img/guy{num}.png')
-            spritesDireita = pygame.transform.scale(spritesDireita, (world.tamanhoBloco * 0.8, world.tamanhoBloco *2 * 0.8))
+            spritesDireita = pygame.transform.scale(spritesDireita, (self.world.tamanhoBloco * 0.8, self.world.tamanhoBloco *2 * 0.8))
             self.spritesDireita.append(spritesDireita)
             
             #A função flip possibilita inverter as imagens. Então se as sprites estavam se movimentando para a direita, agora ela irá se movimenta para esquerda
@@ -58,9 +61,9 @@ class Player():
 
         
     #Função que atualiza o jogador e suas características conforme o input do usuário
-    def update(self, tela, world: World):
+    def update(self, tela):
         
-        if world.game_over == 0:
+        if self.world.game_over == 0:
             
             deltaX = 0
             deltaY = 0 
@@ -72,16 +75,16 @@ class Player():
                 tecla = pygame.key.get_pressed()
                 
                 if tecla[pygame.K_SPACE] and self.jumped == False and self.in_air == False:
-                    self.gravidade = -15
+                    self.gravidade = -self.world.tamanhoBloco * 0.4
                     self.jumped = True
                 if tecla[pygame.K_SPACE] == False: 
                     self.jumped = False
                 if tecla[pygame.K_LEFT]:
-                    deltaX -= world.tamanhoBloco * 0.1
+                    deltaX -= self.world.tamanhoBloco * 0.1
                     self.contador += 1
                     self.direcao = -1
                 if tecla[pygame.K_RIGHT]:
-                    deltaX += world.tamanhoBloco * 0.1
+                    deltaX += self.world.tamanhoBloco * 0.1
                     self.contador += 1
                     self.direcao = 1
                 
@@ -118,14 +121,14 @@ class Player():
             
             #Simulando gravidade ao pular
             self.gravidade += 1
-            if self.gravidade > 10:
-                self.gravidade = 10
+            if self.gravidade > self.world.tamanhoBloco*0.2:
+                self.gravidade = self.world.tamanhoBloco*0.2
             deltaY += self.gravidade
             
             
             #Checando colisões (antes delas acontecerem)
             self.in_air = True
-            for bloco in world.listaBlocos:
+            for bloco in self.world.listaBlocos:
                 
                 #Checando colisão no eixo x
                 #Se ele colidiu com algo no eixo x, basta impedi-lo de seguir adiante
@@ -152,22 +155,42 @@ class Player():
             
             #Checando Game Over (Colisão com inimigos ou lava)
             #spritecollide(sprite1, sprite2, Se a sprite deve sumir após a colisão)
-            if pygame.sprite.spritecollide(self, world.enemy_group, False):
-                world.game_over = -1
+            if pygame.sprite.spritecollide(self, self.world.enemy_group, False):
+                self.world.game_over = -1
                 
-            if pygame.sprite.spritecollide(self, world.lava_group, False):
-                world.game_over = -1
-            
+            if pygame.sprite.spritecollide(self, self.world.lava_group, False):
+                self.world.game_over = -1
                         
             #Atualizando as coordenadas do jogador (movimentando-o)
             self.rect.x += deltaX
             self.rect.y += deltaY
+            #Checando colisão com portão de saída da fase
+            if pygame.sprite.spritecollide(self, self.world.gate_group, False):
+                self.world.game_over = 1 
         
-        elif world.game_over == -1: 
+        elif self.world.game_over == -1: 
             self.imagem = self.deadImage
-            self.rect.y -= world.tamanhoBloco * 0.1
+            self.rect.y -= self.world.tamanhoBloco * 0.1
             
         #Desenhando o jogador
         #Lembre-se que blit pede a superfície/imagem que deseja printar e um retângulo ou uma tupla contendo as coordenadas (x,y) 
         tela.blit(self.imagem, self.rect)
+          
+    #Deveria ficar na classe World, mas criaria dependência circular  
+    #Função para resetarLevel
+    def reset_Level(self):
+        
+        self.reset(x=self.world.posicaoInicialPlayerX, y=self.world.posicaoInicialPlayerY)
+        self.world.lava_group.empty()
+        self.world.gate_group.empty()
+        self.world.enemy_group.empty()
+        
+        #Carregando nova fase
+        #Lendo arquivo de fases e carregando-as para a memória
+        #open(Arquivo que irei ler, r = read, b = binary)
+        if path.exists(f'levels/level{self.world.level}_data'):
+            pickle_in = open(f'levels/level{self.world.level}_data', 'rb')
+            self.world.matrizMundo = pickle.load(pickle_in)
+        else: 
+            print('Fase não existe!')
             

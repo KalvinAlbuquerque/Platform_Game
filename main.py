@@ -19,8 +19,8 @@ quantidadeBlocos = 400
 tamanhoBloco = math.sqrt((alturaTela * larguraTela)/quantidadeBlocos)
 
 screen = Screen(alturaTela=alturaTela,larguraTela=larguraTela)
-world = World(tamanhoBloco=tamanhoBloco)
-player = Player(x=100, y=screen.tela.get_height() - 130, world=world)
+world = World(tamanhoBloco=tamanhoBloco, tela=screen.tela)
+player = Player(x=world.posicaoInicialPlayerX, y=world.posicaoInicialPlayerY, world=world)
 
 #Criando botões 
 
@@ -62,8 +62,6 @@ while True:
         if exit_button.draw(screen.tela):
             exit()
             
-    else:
-        
         #Habilitando e desabilitando autoPlayerMode
         if player.autoPlayer.autoPlayerMode == False:
             if autoPlayerMode_button_OFF.draw(screen.tela):
@@ -73,28 +71,48 @@ while True:
             if autoPlayerMode_button_ON.draw(screen.tela):
                 player.autoPlayer.autoPlayerMode = False
                 
+    else:
+        
+                
         #Desenhando e atualizando recursos de mundo
         world.draw(screen.tela)
         world.enemy_group.draw(screen.tela)
         world.enemy_group.update()
         world.lava_group.draw(screen.tela)
+        world.gate_group.draw(screen.tela)
         
-        player.update(screen.tela, world)
+        player.update(screen.tela)
         
         if pontos == False:
             player.autoPlayer.andar_Para_Direita()
             pontos = True
         
-        #Verificando ocorreu game over para printar opções    
+        #Verificando ocorreu game over 
+        #Se game over == 0 jogo continua
+        #Game over == 1, mudança de fase
+        #Game over = -1, fim de jogo  
         if world.game_over == -1:
             
             #Se o usuário clicou no botão de restart a instância do player é resetada para o início do jogo
             if restart_button.draw(screen.tela):
                 
                 #Apenas para deixar claro: aqui reseto o player
-                player.reset(x=100, y=screen.tela.get_height() - 130)
+                player.reset(x=world.posicaoInicialPlayerX, y=world.posicaoInicialPlayerY)
                 #Aqui restarto o jogo
                 world.game_over = 0
+            
+        if world.game_over == 1:
+            #Se o player passou de fase, então reseto o jogo e passo a fase
+            world.level += 1
+            
+            #Verificando se o level que estou passando existe
+            if world.level <= world.max_Levels:
+                
+                #Resetando world
+                world.matrizMundo = []
+                player.reset_Level()
+                world.game_over = 0
+                
         
     #Verificando qualquer entrada(evento) para manter a interatividade do programa
     for event in pygame.event.get():
