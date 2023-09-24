@@ -36,17 +36,13 @@ class AutoPlayer():
         
         # programe aqui =)
 
-        for i in range(0, 2):
-            self.andar_direita()
-
-        for i in range(0, 8):
-            self.pular_direita()
-        
-        for i in range(0, 2):
-            self.andar_direita()
-
-        for i in range(0, 3):
-            self.andar_esquerda()
+        self.andar_direita()
+        self.andar_direita()
+        self.pular_direita()
+        self.andar_direita()
+        self.andar_direita()
+        self.andar_direita()
+        self.pular_direita()
 
         
 

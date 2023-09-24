@@ -23,6 +23,7 @@ screen = Screen(alturaTela=alturaTela,larguraTela=larguraTela)
 world = World(tamanhoBloco=tamanhoBloco, tela=screen.tela)
 player = Player(x=world.posicaoInicialPlayerX, y=world.posicaoInicialPlayerY, world=world)
 
+#Variáveis para controlar movimento do autoPlayerMode
 max_pixels = 12
 pixel_atual = 0
 movimentoAtual = 0
@@ -59,7 +60,7 @@ while True:
     screen.define_clock(fps=500)
     
     #Desenhando grade, pode comentar caso não queira que apareça
-    # screen.draw_grid(world.tamanhoBloco)
+    screen.draw_grid(world.tamanhoBloco)
     
     #Printando menu de início
     if world.menu == True:
@@ -89,9 +90,9 @@ while True:
         
         player.update(screen.tela)
 
-        tam_lista = len(lista)
-        
-        if (movimentoAtual < tam_lista):
+        #Movendo o jogador com o autoPlayerMode
+        tam_listaMovimento = len(lista)
+        if (movimentoAtual < tam_listaMovimento):
             if(pixel_atual is not max_pixels):
                 if lista[movimentoAtual] == 1:
                     player.autoPlayer.move_Right = True

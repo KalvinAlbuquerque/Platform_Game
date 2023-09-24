@@ -97,6 +97,7 @@ class Player():
                     if self.direcao == -1:
                         self.imagem = self.spritesEsquerda[self.spriteID]
             else:
+                #Controlando movimentos com o autoPlayerMode
                 if self.autoPlayer.move_Right == True:
                     deltaX += self.world.tamanhoBloco * 0.1
                     self.contador += 1
@@ -114,7 +115,6 @@ class Player():
                     self.jumped = False
 
                 self.autoPlayer.resetMoves()
-                pygame.display.update()
             #Desenhando as animações do jogador
             if self.contador > walk_cooldown:
                 self.contador = 0 
