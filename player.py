@@ -98,11 +98,23 @@ class Player():
                         self.imagem = self.spritesEsquerda[self.spriteID]
             else:
                 if self.autoPlayer.move_Right == True:
-                    deltaX += 50
+                    deltaX += self.world.tamanhoBloco * 0.1
                     self.contador += 1
                     self.direcao = 1
-                    self.autoPlayer.resetMoves()
-                    pygame.display.update()
+
+                if self.autoPlayer.move_Left == True:
+                    deltaX -= self.world.tamanhoBloco * 0.1
+                    self.contador += 1
+                    self.direcao = -1
+
+                if  self.autoPlayer.jump == True and self.jumped == False and self.in_air == False:
+                    self.gravidade = -self.world.tamanhoBloco * 0.4
+                    self.jumped = True
+                elif self.autoPlayer.jump == False:
+                    self.jumped = False
+
+                self.autoPlayer.resetMoves()
+                pygame.display.update()
             #Desenhando as animações do jogador
             if self.contador > walk_cooldown:
                 self.contador = 0 

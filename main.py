@@ -13,6 +13,7 @@ from button import Button
 #Inicializando as classes necessárias 
 pygame.init()
 
+
 alturaTela = 680
 larguraTela = 680
 quantidadeBlocos = 400
@@ -21,6 +22,10 @@ tamanhoBloco = math.sqrt((alturaTela * larguraTela)/quantidadeBlocos)
 screen = Screen(alturaTela=alturaTela,larguraTela=larguraTela)
 world = World(tamanhoBloco=tamanhoBloco, tela=screen.tela)
 player = Player(x=world.posicaoInicialPlayerX, y=world.posicaoInicialPlayerY, world=world)
+
+max_pixels = 12
+pixel_atual = 0
+movimentoAtual = 0
 
 #Criando botões 
 
@@ -43,17 +48,18 @@ autoPlayerMode_button_OFF = Button((screen.tela.get_width() - (world.tamanhoBloc
 autoPlayerMode_button_ON = pygame.image.load('img/autoPlayerModeON.png')
 autoPlayerMode_button_ON = Button((screen.tela.get_width() - (world.tamanhoBloco * 3)), (screen.tela.get_height()//10) - (world.tamanhoBloco * 2), autoPlayerMode_button_ON)
 
-
 pontos = False 
+
+lista = player.autoPlayer.lerMovimentos()
+
 #Looping principal do jogo 
 while True:
-
     
     screen.update()
     screen.define_clock(fps=500)
     
     #Desenhando grade, pode comentar caso não queira que apareça
-    #screen.draw_grid(world.tamanhoBloco)
+    # screen.draw_grid(world.tamanhoBloco)
     
     #Printando menu de início
     if world.menu == True:
@@ -82,11 +88,28 @@ while True:
         world.gate_group.draw(screen.tela)
         
         player.update(screen.tela)
+
+        tam_lista = len(lista)
         
-        if pontos == False:
-            player.autoPlayer.andar_Para_Direita()
-            pontos = True
-        
+        if (movimentoAtual < tam_lista):
+            if(pixel_atual is not max_pixels):
+                if lista[movimentoAtual] == 1:
+                    player.autoPlayer.move_Right = True
+                elif lista[movimentoAtual] == 2:
+                    player.autoPlayer.move_Left = True
+                elif lista[movimentoAtual] == 3:
+                    player.autoPlayer.move_Right = True
+                    player.autoPlayer.jump = True
+                elif lista[movimentoAtual] == 4:
+                    player.autoPlayer.move_Left = True
+                    player.autoPlayer.jump = True
+
+                pixel_atual += 1
+
+            else:
+                pixel_atual = 0
+                movimentoAtual += 1
+                
         #Verificando ocorreu game over 
         #Se game over == 0 jogo continua
         #Game over == 1, mudança de fase

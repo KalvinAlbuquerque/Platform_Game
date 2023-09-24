@@ -7,7 +7,7 @@ class Screen():
         
         #Definindo atributos
         #Instanciando a tela do jogo
-        self.tela = pygame.display.set_mode((larguraTela, alturaTela), pygame.RESIZABLE) 
+        self.tela = pygame.display.set_mode((larguraTela, alturaTela)) 
         pygame.display.set_caption('Game')
         
     def update(self):
