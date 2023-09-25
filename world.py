@@ -2,6 +2,7 @@
 import pygame
 from pygame.locals import * 
 import pickle
+import os
 from os import path
 
 from enemy import Enemy
@@ -14,16 +15,16 @@ class World():
     #Construtor
     def __init__(self, tamanhoBloco, tela):
         
+        #Definindo atributos
+        self.listaBlocos = []
+        self.tamanhoBloco = tamanhoBloco
+        
         #Definindo Game Over
         self.game_over = 0
         
         #Definindo variável de controle de fases
         self.level = 1
-        self.max_Levels = 3
-        
-        #Posição de inicio do player
-        self.posicaoInicialPlayerX = 40
-        self.posicaoInicialPlayerY = tela.get_height() - 130
+        self.max_Levels = self.count_files()
         
         #Definindo atributos para controlar o menu
         self.menu = True
@@ -34,9 +35,23 @@ class World():
         self.lava_group = pygame.sprite.Group()
         self.gate_group = pygame.sprite.Group()
         
-        #Definindo atributos
-        self.listaBlocos = []
-        self.tamanhoBloco = tamanhoBloco
+        #Posição de inicio do player
+        self.posicaoInicialPlayerX = 40
+        self.posicaoInicialPlayerY = tela.get_height() - 130
+        
+        #Carregando o mundo
+        self.loadingWorld(tamanhoBloco= self.tamanhoBloco, tela=tela)
+        
+        self.count_files()
+        
+    #Função para desenhar/printar os blocos na tela
+    def draw(self, tela):
+     
+        for bloco in self.listaBlocos:
+            tela.blit(bloco[0], bloco[1])
+
+    #Função para carregar o mundo
+    def loadingWorld(self, tamanhoBloco, tela):
         
         #Lendo arquivo de fases e carregando-as para a memória
         #open(Arquivo que irei ler, r = read, b = binary)
@@ -105,8 +120,20 @@ class World():
                 contadorColunas = contadorColunas +1
             contadorLinhas = contadorLinhas +1
     
-    #Função para desenhar/printar os blocos na tela
-    def draw(self, tela):
-     
-        for bloco in self.listaBlocos:
-            tela.blit(bloco[0], bloco[1])
+    def count_files(self):
+
+        #Caminho do diretório de onde irei contar os arquivos
+        diretorio = 'levels'
+        
+        #Aqui estou listando todos os arquivos que há no diretório
+        arquivos = os.listdir(diretorio)
+        
+        #Filtrando todos os arquivos que começam com "level"
+        #Aqui estou usando uma lista de compreensão [elementoQueDesejoIncluirNaLista for iterator in range if condição]
+        arquivosFiltrados = [arquivoFiltrado for arquivoFiltrado in arquivos if arquivoFiltrado.startswith("level")]
+        
+        #Contando quantos arquivos há no diretório
+        quantidade_de_arquivos = len(arquivosFiltrados)
+        
+        #-1, pois até o presente momento o arquivo level_editor.py está no diretório 'levels'
+        return quantidade_de_arquivos -1

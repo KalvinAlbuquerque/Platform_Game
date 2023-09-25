@@ -49,8 +49,7 @@ autoPlayerMode_button_OFF = Button((screen.tela.get_width() - (world.tamanhoBloc
 autoPlayerMode_button_ON = pygame.image.load('img/autoPlayerModeON.png')
 autoPlayerMode_button_ON = Button((screen.tela.get_width() - (world.tamanhoBloco * 3)), (screen.tela.get_height()//10) - (world.tamanhoBloco * 2), autoPlayerMode_button_ON)
 
-pontos = False 
-
+#Lista para controlar a ordem dos movimentos quando o autoPlayerMode estiver ativo
 lista = Aula1.boneco.lista
 
 #Looping principal do jogo 
@@ -79,7 +78,6 @@ while True:
                 player.autoPlayer.autoPlayerMode = False
                 
     else:
-        
                 
         #Desenhando e atualizando recursos de mundo
         world.draw(screen.tela)
@@ -134,7 +132,7 @@ while True:
                 
                 #Resetando world
                 world.matrizMundo = []
-                player.reset_Level()
+                player.reset_Level(screen.tela)
                 world.game_over = 0
                 
         

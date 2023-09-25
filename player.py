@@ -190,13 +190,13 @@ class Player():
           
     #Deveria ficar na classe World, mas criaria dependência circular  
     #Função para resetarLevel
-    def reset_Level(self):
+    def reset_Level(self, tela):
         
         self.reset(x=self.world.posicaoInicialPlayerX, y=self.world.posicaoInicialPlayerY)
         self.world.lava_group.empty()
         self.world.gate_group.empty()
         self.world.enemy_group.empty()
-        
+        self.world.loadingWorld(tamanhoBloco=self.world.tamanhoBloco, tela=tela)
         #Carregando nova fase
         #Lendo arquivo de fases e carregando-as para a memória
         #open(Arquivo que irei ler, r = read, b = binary)

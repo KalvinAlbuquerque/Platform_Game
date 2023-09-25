@@ -4,12 +4,7 @@ from os import path
 
 #Editor de fases
 #Para utilizá-lo basta rodar esse código. Para colocar blocos diferentes na tela basta clicar várias vezes no mesmo bloco, assim a imagem irá mudar.
-"""  
 
-	IMPORTANTE
-				
-    			"""
-#Quando criar uma fase nova, certifique-se de mudar o atributo max_level em world. (É uma gambiarra por ora, apenas para não bugar o passar de fase)
 pygame.init()
 
 clock = pygame.time.Clock()
@@ -166,6 +161,8 @@ while run:
 		pickle_out = open(f'level{level}_data', 'wb')
 		pickle.dump(world_data, pickle_out)
 		pickle_out.close()
+  
+		#Salvando o numero maximo de levels
 	if load_button.draw():
 		#load in level data
 		if path.exists(f'level{level}_data'):
