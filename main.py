@@ -9,10 +9,10 @@ from world import World
 from player import Player
 from screen import Screen
 from button import Button
+import Aula1
 
 #Inicializando as classes necessárias 
 pygame.init()
-
 
 alturaTela = 680
 larguraTela = 680
@@ -51,7 +51,7 @@ autoPlayerMode_button_ON = Button((screen.tela.get_width() - (world.tamanhoBloco
 
 pontos = False 
 
-lista = player.autoPlayer.lerMovimentos()
+lista = Aula1.boneco.lista
 
 #Looping principal do jogo 
 while True:

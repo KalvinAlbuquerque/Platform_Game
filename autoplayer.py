@@ -35,19 +35,10 @@ class AutoPlayer():
     def lerMovimentos(self):
         
         # programe aqui =)
-
-        self.andar_direita()
-        self.andar_direita()
-        self.pular_direita()
-        self.andar_direita()
-        self.andar_direita()
-        self.andar_direita()
-        self.pular_direita()
-
         
 
         return self.lista # não apague essa linha!
 
-
+boneco = AutoPlayer()
         
         
