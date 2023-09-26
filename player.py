@@ -62,7 +62,6 @@ class Player():
         
     #Função que atualiza o jogador e suas características conforme o input do usuário
     def update(self, tela):
-        
         if self.world.game_over == 0:
             
             deltaX = 0
@@ -145,8 +144,11 @@ class Player():
                 #Checando colisão no eixo x
                 #Se ele colidiu com algo no eixo x, basta impedi-lo de seguir adiante
                 if bloco[1].colliderect(self.rect.x + deltaX, self.rect.y, self.larguraJogador, self.alturaJogador):
+                    self.autoPlayer.isStuck = True
+
                     deltaX = 0 
-                
+                #else:
+                #    self.autoPlayer.isStuck = False
                 #Checando colisão no eixo y 
                 if bloco[1].colliderect(self.rect.x, self.rect.y + deltaY, self.larguraJogador, self.alturaJogador):
                     
@@ -176,6 +178,7 @@ class Player():
             #Atualizando as coordenadas do jogador (movimentando-o)
             self.rect.x += deltaX
             self.rect.y += deltaY
+            
             #Checando colisão com portão de saída da fase
             if pygame.sprite.spritecollide(self, self.world.gate_group, False):
                 self.world.game_over = 1 
@@ -187,6 +190,21 @@ class Player():
         #Desenhando o jogador
         #Lembre-se que blit pede a superfície/imagem que deseja printar e um retângulo ou uma tupla contendo as coordenadas (x,y) 
         tela.blit(self.imagem, self.rect)
+
+        #Verificando colisões para o modo AutoPlayer
+ 
+        #print('Tem bloco na frente')
+        self.temBlocoNaFrente()
+                
+        self.temInimigoNaFrente()
+        #print('TEM INIMIGO NA FRENTE')
+
+        self.temLavaNaFrente()
+        #print('TEM LAVA NA FRENTE')
+
+        self.temBuracoNaFrente()
+        #print('TEM BURACO NA FRENTE')
+
           
     #Deveria ficar na classe World, mas criaria dependência circular  
     #Função para resetarLevel
@@ -206,3 +224,64 @@ class Player():
         else: 
             print('Fase não existe!')
             
+    
+    def temBlocoNaFrente(self):
+        
+        posPlayerX = round(self.rect.x / self.world.tamanhoBloco)
+        posPlayerY = round(self.rect.y / self.world.tamanhoBloco)
+        
+        y = posPlayerY + 1
+        x = posPlayerX + self.direcao
+
+        blocoNaFrente = self.world.matrizMundo[y][x] 
+
+        if blocoNaFrente == 1 or blocoNaFrente == 2:
+            self.autoPlayer.isBlock = True
+        else:
+            self.autoPlayer.isBlock = False
+                
+    def temBuracoNaFrente(self):
+          
+        posPlayerX = round(self.rect.x / self.world.tamanhoBloco)
+        posPlayerY = round(self.rect.y / self.world.tamanhoBloco)
+        
+        y = posPlayerY + 2
+        x = posPlayerX + self.direcao
+
+        buraco = self.world.matrizMundo[y][x] 
+
+        if buraco == 0 and self.in_air == False:
+            self.autoPlayer.isHole = True
+        else:
+            self.autoPlayer.isHole = False
+        
+    def temLavaNaFrente(self):
+          
+        posPlayerX = round(self.rect.x / self.world.tamanhoBloco)
+        posPlayerY = round(self.rect.y / self.world.tamanhoBloco)
+        
+        y = posPlayerY + 2
+        x = posPlayerX + self.direcao
+
+        buraco = self.world.matrizMundo[y][x] 
+
+        if buraco == 6:
+            self.autoPlayer.isLava = True
+        else:
+            self.autoPlayer.isLava = False
+        
+    def temInimigoNaFrente(self):
+            
+        posPlayerX = round(self.rect.x / self.world.tamanhoBloco)
+        posPlayerY = round(self.rect.y / self.world.tamanhoBloco)
+        
+        y = posPlayerY + 1
+        x = posPlayerX + self.direcao
+
+        blocoNaFrente = self.world.matrizMundo[y][x] 
+
+        if blocoNaFrente == 3:
+            self.autoPlayer.isEnemy = True
+        else:
+            self.autoPlayer.isEnemy = False
+        
