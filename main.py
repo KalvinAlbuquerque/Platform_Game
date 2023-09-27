@@ -11,151 +11,217 @@ from world import World
 from player import Player
 from screen import Screen
 from button import Button
-import Aula1
+           
+    
+class Jogo():
+    
+    def __init__(self):
+        self.DIREITA = False
+        self.ESQUERDA = False
+        self.JUMP = False
+        
+        self.max_pixels = 12
+        self.pixel_atual = 0
+        
+        self.executing = True
+        
+        pygame.init()
+
+        self.alturaTela = 680
+        self.larguraTela = 680
+        self.quantidadeBlocos = 400
+        self.tamanhoBloco = math.sqrt((self.alturaTela * self.larguraTela)/self.quantidadeBlocos)
+
+        self.screen = Screen(alturaTela=self.alturaTela,larguraTela=self.larguraTela)
+        self.world = World(tamanhoBloco=self.tamanhoBloco, tela=self.screen.tela)
+        self.player = Player(x=self.world.posicaoInicialPlayerX, y=self.world.posicaoInicialPlayerY, world=self.world)
+
+        #Variáveis para controlar movimento do autoPlayerMode
+
+
+        #Criando botões 
+
+        #Botão de restart
+        self.restart_button = pygame.image.load('img/restart_btn.png')
+        self.restart_button = Button((self.screen.tela.get_width()//2), (self.screen.tela.get_height()//2), self.restart_button)
+
+        #Botão de start 
+        self.start_button = pygame.image.load('img/start_btn.png')
+        self.start_button = Button((self.screen.tela.get_width()//2) - (self.world.tamanhoBloco * 9), (self.screen.tela.get_height()//2), self.start_button)
+
+        #Botão de exit
+        self.exit_button = pygame.image.load('img/exit_btn.png')
+        self.exit_button = Button((self.screen.tela.get_width()//2) + (self.world.tamanhoBloco* 2) , (self.screen.tela.get_height()//2) , self.exit_button)
+
+        #Botões autoPlayerMode
+        self.autoPlayerMode_button_OFF = pygame.image.load('img/autoPlayerModeOFF.png')
+        self.autoPlayerMode_button_OFF = Button((self.screen.tela.get_width() - (self.world.tamanhoBloco * 3)), (self.screen.tela.get_height()//10) - (self.world.tamanhoBloco * 2), self.autoPlayerMode_button_OFF)
+
+        self.autoPlayerMode_button_ON = pygame.image.load('img/autoPlayerModeON.png')
+        self.autoPlayerMode_button_ON = Button((self.screen.tela.get_width() - (self.world.tamanhoBloco * 3)), (self.screen.tela.get_height()//10) - (self.world.tamanhoBloco * 2), self.autoPlayerMode_button_ON)
+
+    def andar_para_direita(self):
+        while(self.pixel_atual is not self.max_pixels):
+            self.player.DIREITA = True
+            self.update()
+            self.pixel_atual += 1
+        
+        self.pixel_atual = 0
+        self.reset_movs()
+    
+    def andar_para_esquerda(self):
+        while(self.pixel_atual is not self.max_pixels):
+            self.player.ESQUERDA = True
+            self.update()
+            self.pixel_atual += 1
+        
+        self.pixel_atual = 0
+        self.reset_movs()
+    
+    def pular_para_direita(self):
+        while(self.pixel_atual is not self.max_pixels):
+            self.player.DIREITA = True
+            self.player.JUMP = True
+            self.update()
+            self.pixel_atual += 1
+        
+        self.pixel_atual = 0
+        self.reset_movs()
+            
+    def pular_para_esquerda(self):
+        while(self.pixel_atual is not self.max_pixels):
+            self.player.ESQUERDA = True
+            self.player.JUMP = True
+            self.update()
+            self.pixel_atual += 1
+        
+        self.pixel_atual = 0
+        self.reset_movs()
+    
+    def esperar(self):
+        while(self.pixel_atual is not self.max_pixels):
+            self.update()
+            self.pixel_atual += 1
+        
+        self.pixel_atual = 0
+        self.reset_movs()
+    
+    def reset_movs(self):
+        self.player.DIREITA = False
+        self.player.ESQUERDA = False
+        self.player.JUMP = False
+
+    def comandos(self):
+        ...
+        
+        
+        #Programe aqui! 
 
 #Inicializando as classes necessárias 
-pygame.init()
-
-alturaTela = 680
-larguraTela = 680
-quantidadeBlocos = 400
-tamanhoBloco = math.sqrt((alturaTela * larguraTela)/quantidadeBlocos)
-
-screen = Screen(alturaTela=alturaTela,larguraTela=larguraTela)
-world = World(tamanhoBloco=tamanhoBloco, tela=screen.tela)
-player = Player(x=world.posicaoInicialPlayerX, y=world.posicaoInicialPlayerY, world=world)
-
-#Variáveis para controlar movimento do autoPlayerMode
-max_pixels = 12
-pixel_atual = 0
-movimentoAtual = 0
-
-#Criando botões 
-
-#Botão de restart
-restart_button = pygame.image.load('img/restart_btn.png')
-restart_button = Button((screen.tela.get_width()//2), (screen.tela.get_height()//2), restart_button)
-
-#Botão de start 
-start_button = pygame.image.load('img/start_btn.png')
-start_button = Button((screen.tela.get_width()//2) - (world.tamanhoBloco * 9), (screen.tela.get_height()//2), start_button)
-
-#Botão de exit
-exit_button = pygame.image.load('img/exit_btn.png')
-exit_button = Button((screen.tela.get_width()//2) + (world.tamanhoBloco* 2) , (screen.tela.get_height()//2) , exit_button)
-
-#Botões autoPlayerMode
-autoPlayerMode_button_OFF = pygame.image.load('img/autoPlayerModeOFF.png')
-autoPlayerMode_button_OFF = Button((screen.tela.get_width() - (world.tamanhoBloco * 3)), (screen.tela.get_height()//10) - (world.tamanhoBloco * 2), autoPlayerMode_button_OFF)
-
-autoPlayerMode_button_ON = pygame.image.load('img/autoPlayerModeON.png')
-autoPlayerMode_button_ON = Button((screen.tela.get_width() - (world.tamanhoBloco * 3)), (screen.tela.get_height()//10) - (world.tamanhoBloco * 2), autoPlayerMode_button_ON)
 
 #Lista para controlar a ordem dos movimentos quando o autoPlayerMode estiver ativo
-lista = Aula1.boneco.lista
 
-teste = False
+    def update(self):
+        
+            jogo.screen.update()
+            jogo.screen.define_clock(fps=100)
+            
+            #Desenhando grade, pode comentar caso não queira que apareça
+            jogo.screen.draw_grid(jogo.world.tamanhoBloco)
+            
+                #Desenhando e atualizando recursos de mundo
+            self.world.draw(self.screen.tela)
+            self.world.enemy_group.draw(self.screen.tela)
+            self.world.enemy_group.update()
+            self.world.lava_group.draw(self.screen.tela)
+            self.world.gate_group.draw(self.screen.tela)
+            
+            self.player.update(self.screen.tela)
+                    
+            #Verificando ocorreu game over 
+            #Se game over == 0 jogo continua
+            #Game over == 1, mudança de fase
+            #Game over = -1, fim de jogo  
+            if self.world.game_over == -1:
+                
+                #Se o usuário clicou no botão de restart a instância do player é resetada para o início do jogo
+                if self.restart_button.draw(self.screen.tela):
+                    
+                    #Apenas para deixar claro: aqui reseto o player
+                    self.player.reset(x=self.world.posicaoInicialPlayerX, y=self.world.posicaoInicialPlayerY)
+                    #Aqui restarto o jogo
+                    self.world.game_over = 0
+                
+            if self.world.game_over == 1:
+                #Se o player passou de fase, então reseto o jogo e passo a fase
+                self.world.level += 1
+                
+                #Verificando se o level que estou passando existe
+                if self.world.level <= self.world.max_Levels:
+                    
+                    #Resetando self.world
+                    self.world.matrizMundo = []
+                    self.player.reset_Level(self.screen.tela)
+                    self.world.game_over = 0
+            
+            #Verificando qualquer entrada(evento) para manter a interatividade do programa
+            for event in pygame.event.get():
+
+                #Habilitando o botão "xis" para encerrar o programa
+                if event.type == QUIT:
+                    pygame.quit()
+                    exit()
+            
+            #Atualizando a tela a cada nova interação
+            pygame.display.update()
+
+
+jogo = Jogo()
+
+
+
 #Looping principal do jogo 
-while True:
+while jogo.world.menu:
     
-    screen.update()
-    screen.define_clock(fps=500)
+    jogo.screen.update()
+    jogo.screen.define_clock(fps=100)
     
     #Desenhando grade, pode comentar caso não queira que apareça
-    screen.draw_grid(world.tamanhoBloco)
+    jogo.screen.draw_grid(jogo.world.tamanhoBloco)
     
     #Printando menu de início
-    if world.menu == True:
-        if start_button.draw(screen.tela):
-            world.menu = False
-        if exit_button.draw(screen.tela):
+    if jogo.world.menu == True:
+        if jogo.start_button.draw(jogo.screen.tela):
+            jogo.world.menu = False
+            break
+        if jogo.exit_button.draw(jogo.screen.tela):
             exit()
             
         #Habilitando e desabilitando autoPlayerMode
-        if player.autoPlayer.autoPlayerMode == False:
-            if autoPlayerMode_button_OFF.draw(screen.tela):
-                player.autoPlayer.autoPlayerMode = True
+        if jogo.player.autoPlayerMode == False:
+            if jogo.autoPlayerMode_button_OFF.draw(jogo.screen.tela):
+                jogo.player.autoPlayerMode = True
                 
-        if player.autoPlayer.autoPlayerMode == True:
-            if autoPlayerMode_button_ON.draw(screen.tela):
-                player.autoPlayer.autoPlayerMode = False
-                
-    else:
-                
-        #Desenhando e atualizando recursos de mundo
-        world.draw(screen.tela)
-        world.enemy_group.draw(screen.tela)
-        world.enemy_group.update()
-        world.lava_group.draw(screen.tela)
-        world.gate_group.draw(screen.tela)
+        if jogo.player.autoPlayerMode == True:
+            if jogo.autoPlayerMode_button_ON.draw(jogo.screen.tela):
+                jogo.player.autoPlayerMode = False
         
-        player.update(screen.tela)
-                
-        #Movendo o jogador com o autoPlayerMode
-        tam_listaMovimento = len(lista)
-        if (movimentoAtual < tam_listaMovimento):
-            if(pixel_atual is not max_pixels):
-                if lista[movimentoAtual] == 1:
-                    player.autoPlayer.move_Right = True
-                elif lista[movimentoAtual] == 2:
-                    player.autoPlayer.move_Left = True
-                elif lista[movimentoAtual] == 3:
-                    player.autoPlayer.move_Right = True
-                    player.autoPlayer.jump = True
-                elif lista[movimentoAtual] == 4:
-                    player.autoPlayer.move_Left = True
-                    player.autoPlayer.jump = True
+        #Verificando qualquer entrada(evento) para manter a interatividade do programa
+        for event in pygame.event.get():
 
-                pixel_atual += 1
-
-            else:
-                pixel_atual = 0
-                movimentoAtual += 1
-                
-            
-        #Verificando ocorreu game over 
-        #Se game over == 0 jogo continua
-        #Game over == 1, mudança de fase
-        #Game over = -1, fim de jogo  
-        if world.game_over == -1:
-            
-            #Se o usuário clicou no botão de restart a instância do player é resetada para o início do jogo
-            if restart_button.draw(screen.tela):
-                
-                #Apenas para deixar claro: aqui reseto o player
-                player.reset(x=world.posicaoInicialPlayerX, y=world.posicaoInicialPlayerY)
-                #Aqui restarto o jogo
-                world.game_over = 0
-            
-        if world.game_over == 1:
-            #Se o player passou de fase, então reseto o jogo e passo a fase
-            world.level += 1
-            
-            #Verificando se o level que estou passando existe
-            if world.level <= world.max_Levels:
-                
-                #Resetando world
-                world.matrizMundo = []
-                player.reset_Level(screen.tela)
-                world.game_over = 0
-                
+            #Habilitando o botão "xis" para encerrar o programa
+            if event.type == QUIT:
+                pygame.quit()
+                exit()
         
-    #Verificando qualquer entrada(evento) para manter a interatividade do programa
-    for event in pygame.event.get():
+        #Atualizando a tela a cada nova interação
+        pygame.display.update()
+ 
+jogo.comandos()
 
-        #Habilitando o botão "xis" para encerrar o programa
-        if event.type == QUIT:
-            pygame.quit()
-            exit()
-            
-    #Atualizando a tela a cada nova interação
-    pygame.display.update()
-    
-    if teste == False:
+while True:
+    jogo.update()
         
-        player.autoPlayer.lerMovimentos()
-        teste = True
-    
 
 
-
+ 

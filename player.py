@@ -1,6 +1,5 @@
 import pygame
 from world import World
-from autoplayer import AutoPlayer
 
 import pickle
 from os import path
@@ -11,7 +10,6 @@ class Player():
     def __init__(self, x, y, world: World):
         
         #Atributo que controla o autoplayer
-        self.autoPlayer = AutoPlayer()
         self.world = world
         
         self.reset(x,y)
@@ -58,7 +56,16 @@ class Player():
         #Atributos relacionados à morte do jogador:
         self.deadImage = pygame.image.load('img/ghost.png')
         
-
+        self.autoPlayerMode = True
+        
+        self.isBlock = False
+        self.isEnemy = False
+        self.isHole = False
+        self.isLava = False
+        
+        self.DIREITA = False
+        self.ESQUERDA = False
+        self.JUMP = False
         
     #Função que atualiza o jogador e suas características conforme o input do usuário
     def update(self, tela):
@@ -69,7 +76,7 @@ class Player():
             walk_cooldown = 10
             
             #Controlando se o jogador irá se mover no modo automático ou pelas setas
-            if self.autoPlayer.autoPlayerMode == False:
+            if self.autoPlayerMode == False:
                 #Recebendo os inputs para movimentar o player
                 tecla = pygame.key.get_pressed()
                 
@@ -97,23 +104,22 @@ class Player():
                         self.imagem = self.spritesEsquerda[self.spriteID]
             else:
                 #Controlando movimentos com o autoPlayerMode
-                if self.autoPlayer.move_Right == True:
+                if self.DIREITA:
                     deltaX += self.world.tamanhoBloco * 0.1
                     self.contador += 1
                     self.direcao = 1
 
-                if self.autoPlayer.move_Left == True:
+                if self.ESQUERDA:
                     deltaX -= self.world.tamanhoBloco * 0.1
                     self.contador += 1
                     self.direcao = -1
 
-                if  self.autoPlayer.jump == True and self.jumped == False and self.in_air == False:
+                if  self.JUMP and self.jumped == False and self.in_air == False:
                     self.gravidade = -self.world.tamanhoBloco * 0.4
                     self.jumped = True
-                elif self.autoPlayer.jump == False:
+                elif self.JUMP == False:
                     self.jumped = False
 
-                self.autoPlayer.resetMoves()
             #Desenhando as animações do jogador
             if self.contador > walk_cooldown:
                 self.contador = 0 
@@ -144,7 +150,7 @@ class Player():
                 #Checando colisão no eixo x
                 #Se ele colidiu com algo no eixo x, basta impedi-lo de seguir adiante
                 if bloco[1].colliderect(self.rect.x + deltaX, self.rect.y, self.larguraJogador, self.alturaJogador):
-                    self.autoPlayer.isStuck = True
+                    # self.autoPlayer.isStuck = True
 
                     deltaX = 0 
                 #else:
@@ -236,9 +242,9 @@ class Player():
         blocoNaFrente = self.world.matrizMundo[y][x] 
 
         if blocoNaFrente == 1 or blocoNaFrente == 2:
-            self.autoPlayer.isBlock = True
+            return True
         else:
-            self.autoPlayer.isBlock = False
+            return False
                 
     def temBuracoNaFrente(self):
           
@@ -251,9 +257,9 @@ class Player():
         buraco = self.world.matrizMundo[y][x] 
 
         if buraco == 0 and self.in_air == False:
-            self.autoPlayer.isHole = True
+            return True
         else:
-            self.autoPlayer.isHole = False
+            return False
         
     def temLavaNaFrente(self):
           
@@ -266,9 +272,9 @@ class Player():
         buraco = self.world.matrizMundo[y][x] 
 
         if buraco == 6:
-            self.autoPlayer.isLava = True
+            return True
         else:
-            self.autoPlayer.isLava = False
+            return False
         
     def temInimigoNaFrente(self):
             
@@ -281,7 +287,7 @@ class Player():
         blocoNaFrente = self.world.matrizMundo[y][x] 
 
         if blocoNaFrente == 3:
-            self.autoPlayer.isEnemy = True
+            return True
         else:
-            self.autoPlayer.isEnemy = False
+            return False
         
