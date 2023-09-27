@@ -12,6 +12,7 @@ from player import Player
 from screen import Screen
 from button import Button
 import Aula1
+from autoplayer import AutoPlayer
 
 #Inicializando as classes necessárias 
 pygame.init()
@@ -29,6 +30,7 @@ player = Player(x=world.posicaoInicialPlayerX, y=world.posicaoInicialPlayerY, wo
 max_pixels = 12
 pixel_atual = 0
 movimentoAtual = 0
+verificacoAtual = 0
 
 #Criando botões 
 
@@ -52,9 +54,9 @@ autoPlayerMode_button_ON = pygame.image.load('img/autoPlayerModeON.png')
 autoPlayerMode_button_ON = Button((screen.tela.get_width() - (world.tamanhoBloco * 3)), (screen.tela.get_height()//10) - (world.tamanhoBloco * 2), autoPlayerMode_button_ON)
 
 #Lista para controlar a ordem dos movimentos quando o autoPlayerMode estiver ativo
-lista = Aula1.boneco.lista
+lista = player.autoPlayer.lerMovimentos()
+print(lista)
 
-teste = False
 #Looping principal do jogo 
 while True:
     
@@ -95,23 +97,30 @@ while True:
         tam_listaMovimento = len(lista)
         if (movimentoAtual < tam_listaMovimento):
             if(pixel_atual is not max_pixels):
-                if lista[movimentoAtual] == 1:
+                
+                if lista[movimentoAtual][0] == 1 and lista[movimentoAtual][1] == False:
                     player.autoPlayer.move_Right = True
-                elif lista[movimentoAtual] == 2:
+                elif lista[movimentoAtual][0] == 2 and lista[movimentoAtual][1] == False:
                     player.autoPlayer.move_Left = True
-                elif lista[movimentoAtual] == 3:
+                elif lista[movimentoAtual][0] == 3 and lista[movimentoAtual][1] == False:
                     player.autoPlayer.move_Right = True
-                    player.autoPlayer.jump = True
-                elif lista[movimentoAtual] == 4:
+                    player.autoPlayer.jump = True 
+                elif lista[movimentoAtual][0] == 4 and lista[movimentoAtual][1] == False:
                     player.autoPlayer.move_Left = True
                     player.autoPlayer.jump = True
+                elif lista[movimentoAtual][0] == 5:
+                    player.temBlocoNaFrente()
+                    lista = player.autoPlayer.lerMovimentos()
 
                 pixel_atual += 1
 
             else:
                 pixel_atual = 0
-                movimentoAtual += 1
                 
+                novaTupla = (lista[movimentoAtual][0], True) 
+                lista[movimentoAtual] = novaTupla 
+                
+                movimentoAtual += 1
             
         #Verificando ocorreu game over 
         #Se game over == 0 jogo continua
@@ -150,11 +159,7 @@ while True:
             
     #Atualizando a tela a cada nova interação
     pygame.display.update()
-    
-    if teste == False:
-        
-        player.autoPlayer.lerMovimentos()
-        teste = True
+
     
 
 

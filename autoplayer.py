@@ -7,68 +7,61 @@ class AutoPlayer():
         self.move_Left = False
         self.jump  = False
         
-        self.lista = []
-        self.direita = 1
-        self.esquerda = 2
-        self._pular_direita = 3
-        self._pular_esquerda = 4
+        self.listaMovimentos = []
+        self.direita = (1,False)
+        self.esquerda = (2,False)
+        self._pular_direita = (3,False)
+        self._pular_esquerda = (4,False)
         
-        self.isBlock = False
+        self.listaVerificacoes = []
+        self.verificarBloco = (5,False)
         self.isEnemy = False
         self.isLava = False 
         self.isHole = False
+        self.isBlock = False
         
+    #Funções para movimentar o jogador automaticamente
     def andar_direita(self):
-        self.lista.append(self.direita)
+        self.listaMovimentos.append(self.direita)
     
     def andar_esquerda(self):
-        self.lista.append(self.esquerda)
+        self.listaMovimentos.append(self.esquerda)
 
     def pular_direita(self):
-        self.lista.append(self._pular_direita)
+        self.listaMovimentos.append(self._pular_direita)
     
     def pular_esquerda(self):
-        self.lista.append(self._pular_esquerda)
+        self.listaMovimentos.append(self._pular_esquerda)
         
-    def tem_buraco_na_frente(self):
+    #Funções para verificar a colisão com elementos dentro do jogo
+    def tem_bloco_na_frente(self):
+        self.listaMovimentos.append(self.verificarBloco)
+        
         if self.isHole:
             return True
         else:
-            return False  
-    
-    def tem_lava_na_frente(self):
-        if self.isLava:
-            return True
-        else:
-            return False  
-        
-    def tem_inimigo_na_frente(self):
-        if self.isEnemy:
-            return True
-        else:
-            return False    
+            return False
             
-    def tem_bloco_na_frente(self):
-        if self.isBlock:
-            print('Tem bloco aqui')
-            return True
-        else:
-            return False    
+ 
          
     def resetMoves(self):
         self.move_Right = False
         self.move_Left = False
         self.jump  = False
-            
-    #daqui pra cima se mexer vai quebrar o jogo =(
-
+        
     def lerMovimentos(self):
         
-        # programe aqui =)
+        boneco = AutoPlayer()
+
+        boneco.andar_direita()
+        boneco.andar_direita()
         
+        if boneco.tem_bloco_na_frente():
+            boneco.pular_direita()
+
+        print(boneco.listaMovimentos)
         
-        
-        return self.lista # não apague essa linha!
+        return boneco.listaMovimentos
 
 
         

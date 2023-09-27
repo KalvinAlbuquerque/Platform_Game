@@ -190,21 +190,6 @@ class Player():
         #Desenhando o jogador
         #Lembre-se que blit pede a superfície/imagem que deseja printar e um retângulo ou uma tupla contendo as coordenadas (x,y) 
         tela.blit(self.imagem, self.rect)
-
-        #Verificando colisões para o modo AutoPlayer
- 
-        #print('Tem bloco na frente')
-        self.temBlocoNaFrente()
-                
-        self.temInimigoNaFrente()
-        #print('TEM INIMIGO NA FRENTE')
-
-        self.temLavaNaFrente()
-        #print('TEM LAVA NA FRENTE')
-
-        self.temBuracoNaFrente()
-        #print('TEM BURACO NA FRENTE')
-
           
     #Deveria ficar na classe World, mas criaria dependência circular  
     #Função para resetarLevel
@@ -224,7 +209,7 @@ class Player():
         else: 
             print('Fase não existe!')
             
-    
+    #Funções para verificar colisões com elementos dentro do jogo
     def temBlocoNaFrente(self):
         
         posPlayerX = round(self.rect.x / self.world.tamanhoBloco)
@@ -236,9 +221,11 @@ class Player():
         blocoNaFrente = self.world.matrizMundo[y][x] 
 
         if blocoNaFrente == 1 or blocoNaFrente == 2:
-            self.autoPlayer.isBlock = True
+            self.autoPlayer.isHole = True
+            return True
+
         else:
-            self.autoPlayer.isBlock = False
+            return False
                 
     def temBuracoNaFrente(self):
           
