@@ -10,6 +10,9 @@ class Screen():
         self.tela = pygame.display.set_mode((larguraTela, alturaTela)) 
         pygame.display.set_caption('Game')
         
+        #Variavel que controlar o desenho da grade que desenha os blocos
+        self.visualizarGrade = False
+        
     def update(self):
         
         #Carregando imagens

@@ -40,7 +40,7 @@ class Jogo():
 
 
         #Criando botões 
-
+        
         #Botão de restart
         self.restart_button = pygame.image.load('img/restart_btn.png')
         self.restart_button = Button((self.screen.tela.get_width()//2), (self.screen.tela.get_height()//2), self.restart_button)
@@ -59,6 +59,14 @@ class Jogo():
 
         self.autoPlayerMode_button_ON = pygame.image.load('img/autoPlayerModeON.png')
         self.autoPlayerMode_button_ON = Button((self.screen.tela.get_width() - (self.world.tamanhoBloco * 3)), (self.screen.tela.get_height()//10) - (self.world.tamanhoBloco * 2), self.autoPlayerMode_button_ON)
+        
+        #Botão de visualizar a grade do jogo
+        self.grid_ON = pygame.image.load('img/comGrade.png')
+        self.grid_ON = Button(0 + self.tamanhoBloco * 1 * 0.3, (self.screen.tela.get_height()//10) - (self.world.tamanhoBloco * 2), self.grid_ON)
+        
+        self.grid_OFF = pygame.image.load('img/semGrade.png')
+        self.grid_OFF = Button(0 + self.tamanhoBloco * 1 * 0.3, (self.screen.tela.get_height()//10) - (self.world.tamanhoBloco * 2), self.grid_OFF)
+
 
     def andar_para_direita(self):
         while(self.pixel_atual is not self.max_pixels):
@@ -123,11 +131,9 @@ class Jogo():
 
     def update(self):
         
+        
             jogo.screen.update()
             jogo.screen.define_clock(fps=100)
-            
-            #Desenhando grade, pode comentar caso não queira que apareça
-            jogo.screen.draw_grid(jogo.world.tamanhoBloco)
             
             #Desenhando e atualizando recursos de mundo
             self.world.draw(self.screen.tela)
@@ -138,6 +144,10 @@ class Jogo():
             
             self.player.update(self.screen.tela)
                     
+            #Desenhando grade, pode comentar caso não queira que apareça
+            if jogo.screen.visualizarGrade == True:
+                jogo.screen.draw_grid(jogo.world.tamanhoBloco)
+    
             #Verificando ocorreu game over 
             #Se game over == 0 jogo continua
             #Game over == 1, mudança de fase
@@ -161,6 +171,15 @@ class Jogo():
                     #Resetando self.world
                     self.player.reset_Level(self.screen.tela)
                     self.world.game_over = 0
+                    
+            #Desenhando botão de habilitar e desabilitar grade
+            if jogo.screen.visualizarGrade == False:
+                if jogo.grid_OFF.draw(jogo.screen.tela):
+                    jogo.screen.visualizarGrade = True
+                
+            if jogo.screen.visualizarGrade == True:
+                if jogo.grid_ON.draw(jogo.screen.tela):
+                    jogo.screen.visualizarGrade = False
             
             #Verificando qualquer entrada(evento) para manter a interatividade do programa
             for event in pygame.event.get():
@@ -184,9 +203,6 @@ while jogo.world.menu:
     jogo.screen.update()
     jogo.screen.define_clock(fps=100)
     
-    #Desenhando grade, pode comentar caso não queira que apareça
-    jogo.screen.draw_grid(jogo.world.tamanhoBloco)
-    
     #Printando menu de início
     if jogo.world.menu == True:
         if jogo.start_button.draw(jogo.screen.tela):
@@ -194,16 +210,16 @@ while jogo.world.menu:
             break
         if jogo.exit_button.draw(jogo.screen.tela):
             exit()
-            
+    
         #Habilitando e desabilitando autoPlayerMode
         if jogo.player.autoPlayerMode == False:
             if jogo.autoPlayerMode_button_OFF.draw(jogo.screen.tela):
-                jogo.player.autoPlayerMode = True
+                jogo.player.autoPlayerMode = True                
                 
         if jogo.player.autoPlayerMode == True:
             if jogo.autoPlayerMode_button_ON.draw(jogo.screen.tela):
                 jogo.player.autoPlayerMode = False
-        
+                
         #Verificando qualquer entrada(evento) para manter a interatividade do programa
         for event in pygame.event.get():
 
