@@ -216,6 +216,7 @@ class Player():
         self.world.lava_group.empty()
         self.world.gate_group.empty()
         self.world.enemy_group.empty()
+        self.world.coin_group.empty()
         self.world.loadingWorld(tamanhoBloco=self.world.tamanhoBloco, tela=tela)
             
     
