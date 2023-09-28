@@ -72,7 +72,6 @@ class World():
         if path.exists(f'levels/level{self.level}_data'):
             pickle_in = open(f'levels/level{self.level}_data', 'rb')
             self.matrizMundo = pickle.load(pickle_in)
-            print(self.matrizMundo)
         else: 
             print('Fase não existe!')
         

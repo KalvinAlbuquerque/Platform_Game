@@ -180,7 +180,6 @@ class Player():
                 
             if pygame.sprite.spritecollide(self, self.world.coin_group, True):
                 self.world.score += 1
-                print(self.world.score)
                         
             #Atualizando as coordenadas do jogador (movimentando-o)
             self.rect.x += deltaX
@@ -200,17 +199,13 @@ class Player():
 
         #Verificando colisões para o modo AutoPlayer
  
-        #print('Tem bloco na frente')
         self.temBlocoNaFrente()
                 
         self.temInimigoNaFrente()
-        #print('TEM INIMIGO NA FRENTE')
 
         self.temLavaNaFrente()
-        #print('TEM LAVA NA FRENTE')
 
         self.temBuracoNaFrente()
-        #print('TEM BURACO NA FRENTE')
 
           
     #Deveria ficar na classe World, mas criaria dependência circular  
