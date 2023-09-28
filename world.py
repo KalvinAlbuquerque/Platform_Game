@@ -16,7 +16,6 @@ class World():
     def __init__(self, tamanhoBloco, tela):
         
         #Definindo atributos
-        self.listaBlocos = []
         self.tamanhoBloco = tamanhoBloco
         
         #Definindo Game Over
@@ -38,11 +37,13 @@ class World():
         #Posição de inicio do player
         self.posicaoInicialPlayerX = 40
         self.posicaoInicialPlayerY = tela.get_height() - 130
-        
+
         #Carregando o mundo
         self.loadingWorld(tamanhoBloco= self.tamanhoBloco, tela=tela)
         
         self.count_files()
+    
+
         
     #Função para desenhar/printar os blocos na tela
     def draw(self, tela):
@@ -53,14 +54,17 @@ class World():
     #Função para carregar o mundo
     def loadingWorld(self, tamanhoBloco, tela):
         
+        #Carregando nova fase
         #Lendo arquivo de fases e carregando-as para a memória
         #open(Arquivo que irei ler, r = read, b = binary)
+        self.matrizMundo = []
+        self.listaBlocos = []
         if path.exists(f'levels/level{self.level}_data'):
             pickle_in = open(f'levels/level{self.level}_data', 'rb')
             self.matrizMundo = pickle.load(pickle_in)
+            print(self.matrizMundo)
         else: 
             print('Fase não existe!')
-
         
         #Carregando imagens
         chaoImagem = pygame.image.load('img/dirt.png')

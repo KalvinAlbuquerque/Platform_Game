@@ -129,7 +129,7 @@ class Jogo():
             #Desenhando grade, pode comentar caso não queira que apareça
             jogo.screen.draw_grid(jogo.world.tamanhoBloco)
             
-                #Desenhando e atualizando recursos de mundo
+            #Desenhando e atualizando recursos de mundo
             self.world.draw(self.screen.tela)
             self.world.enemy_group.draw(self.screen.tela)
             self.world.enemy_group.update()
@@ -158,9 +158,7 @@ class Jogo():
                 
                 #Verificando se o level que estou passando existe
                 if self.world.level <= self.world.max_Levels:
-                    
                     #Resetando self.world
-                    self.world.matrizMundo = []
                     self.player.reset_Level(self.screen.tela)
                     self.world.game_over = 0
             

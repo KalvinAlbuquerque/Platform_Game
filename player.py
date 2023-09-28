@@ -11,14 +11,13 @@ class Player():
         
         #Atributo que controla o autoplayer
         self.world = world
-        
+        self.autoPlayerMode = False
         self.reset(x,y)
         
     #Função que reseta todas as variáveis e atributos da classe player
     #É chamada no construtor para facilitar quando ocorrer um game over e o usuário desejar reiniciar o jogo
     def reset(self, x,y):
         #Definindo atributos:
-        
   
         self.game_over = 0
         #Atributos relacionados às sprites
@@ -55,8 +54,6 @@ class Player():
         
         #Atributos relacionados à morte do jogador:
         self.deadImage = pygame.image.load('img/ghost.png')
-        
-        self.autoPlayerMode = True
         
         self.isBlock = False
         self.isEnemy = False
@@ -221,14 +218,6 @@ class Player():
         self.world.gate_group.empty()
         self.world.enemy_group.empty()
         self.world.loadingWorld(tamanhoBloco=self.world.tamanhoBloco, tela=tela)
-        #Carregando nova fase
-        #Lendo arquivo de fases e carregando-as para a memória
-        #open(Arquivo que irei ler, r = read, b = binary)
-        if path.exists(f'levels/level{self.world.level}_data'):
-            pickle_in = open(f'levels/level{self.world.level}_data', 'rb')
-            self.world.matrizMundo = pickle.load(pickle_in)
-        else: 
-            print('Fase não existe!')
             
     
     def temBlocoNaFrente(self):
