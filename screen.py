@@ -35,4 +35,3 @@ class Screen():
     def define_clock(self, fps):
         clock = pygame.time.Clock()
         clock.tick(fps)
-        

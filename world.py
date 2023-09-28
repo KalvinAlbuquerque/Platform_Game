@@ -8,6 +8,7 @@ from os import path
 from enemy import Enemy
 from lava import Lava
 from gate import Gate
+from coin import Coin
 
 
 class World():
@@ -28,11 +29,20 @@ class World():
         #Definindo atributos para controlar o menu
         self.menu = True
         
+        #Contador de coins
+        self.score = 0
+        
+        
+        #Definindo fontes para os textos do score e level
+        self.fonte_score = pygame.font.SysFont('Times new romam', 20)
+        self.cor_score = (255,255,0) 
+        
         #Definindo um grupo  -> semelhante a uma lista no pygame
         #É útil, pois um jogo lida com várias quantidades de inimigos, por exemplo. Ter um grupo faz com que você possa modificar todos de vez
         self.enemy_group = pygame.sprite.Group()
         self.lava_group = pygame.sprite.Group()
         self.gate_group = pygame.sprite.Group()
+        self.coin_group = pygame.sprite.Group()
         
         #Posição de inicio do player
         self.posicaoInicialPlayerX = 40
@@ -110,7 +120,7 @@ class World():
                     self.listaBlocos.append(bloco)
                 
                 if bloco == 3:
-                    enemy = Enemy(contadorColunas * self.tamanhoBloco, (contadorLinhas * self.tamanhoBloco) + self.tamanhoBloco*0.3)
+                    enemy = Enemy(contadorColunas * self.tamanhoBloco, (contadorLinhas * self.tamanhoBloco) + self.tamanhoBloco*0.1, self.tamanhoBloco)
                     self.enemy_group.add(enemy)
                     
                 if bloco == 6:
@@ -120,6 +130,10 @@ class World():
                 if bloco == 8:
                     gate =  Gate(contadorColunas * self.tamanhoBloco, contadorLinhas * self.tamanhoBloco - (self.tamanhoBloco //2), self.tamanhoBloco)
                     self.gate_group.add(gate)    
+                    
+                if bloco == 7:
+                    coin = Coin(contadorColunas * self.tamanhoBloco + (tamanhoBloco //2), contadorLinhas * self.tamanhoBloco + 15 , self.tamanhoBloco)
+                    self.coin_group.add(coin)
                                     
                 contadorColunas = contadorColunas +1
             contadorLinhas = contadorLinhas +1
@@ -141,3 +155,8 @@ class World():
         
         #-1, pois até o presente momento o arquivo level_editor.py está no diretório 'levels'
         return quantidade_de_arquivos -1
+    
+            
+    def draw_text(self,texto, fonte , text_color, x, y, tela):
+        imagem = fonte.render(texto, True, text_color)
+        tela.blit(imagem, (x,y))

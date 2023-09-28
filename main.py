@@ -4,8 +4,6 @@ from pygame.locals import *
 from sys import exit
 import math
 
-import threading
-
 #Importando bibliotecas locais
 from world import World
 from player import Player
@@ -141,8 +139,12 @@ class Jogo():
             self.world.enemy_group.update()
             self.world.lava_group.draw(self.screen.tela)
             self.world.gate_group.draw(self.screen.tela)
-            
+            self.world.coin_group.draw(self.screen.tela)
             self.player.update(self.screen.tela)
+            
+            if self.world.menu == False:
+                self.world.draw_text('SCORE: ' + str(self.world.score), self.world.fonte_score, self.world.cor_score, self.world.tamanhoBloco * 18, 10, self.screen.tela)
+                self.world.draw_text('LEVEL: ' + str(self.world.level), self.world.fonte_score, self.world.cor_score, self.tamanhoBloco * 18, 30, self.screen.tela)
                     
             #Desenhando grade, pode comentar caso não queira que apareça
             if jogo.screen.visualizarGrade == True:
@@ -180,6 +182,16 @@ class Jogo():
             if jogo.screen.visualizarGrade == True:
                 if jogo.grid_ON.draw(jogo.screen.tela):
                     jogo.screen.visualizarGrade = False
+                    
+            if self.world.level == self.world.max_Levels+1:
+                self.world.menu = True 
+            if jogo.world.menu == True:
+                if jogo.start_button.draw(jogo.screen.tela):
+                    jogo.world.menu = False
+                    jogo.world.level = 0
+                if jogo.exit_button.draw(jogo.screen.tela):
+                    exit()
+
             
             #Verificando qualquer entrada(evento) para manter a interatividade do programa
             for event in pygame.event.get():

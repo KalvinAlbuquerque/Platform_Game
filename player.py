@@ -18,7 +18,7 @@ class Player():
     #É chamada no construtor para facilitar quando ocorrer um game over e o usuário desejar reiniciar o jogo
     def reset(self, x,y):
         #Definindo atributos:
-  
+        self.world.score = 0
         self.game_over = 0
         #Atributos relacionados às sprites
         self.spritesDireita = []
@@ -177,6 +177,10 @@ class Player():
                 
             if pygame.sprite.spritecollide(self, self.world.lava_group, False):
                 self.world.game_over = -1
+                
+            if pygame.sprite.spritecollide(self, self.world.coin_group, True):
+                self.world.score += 1
+                print(self.world.score)
                         
             #Atualizando as coordenadas do jogador (movimentando-o)
             self.rect.x += deltaX
