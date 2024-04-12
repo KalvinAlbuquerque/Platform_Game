@@ -3,7 +3,9 @@
 Jogo desenvolvido com o intuito de ensinar lógica de programação para aspirantes à programação. O jogo conta com uma opção de "piloto automático" em que o jogador pode adicionar no código do jogo algo como "ande", "pule" dentro de laços de repetições e expressões condicionais. 
 
 <center>
+ 
 ![Main Image](https://github.com/KalvinAlbuquerque/game/blob/main/.imgGit/mainImage.png)
+
 </center>
 
 # Requisitos
@@ -19,8 +21,11 @@ pip3 install pygame #Instalando a biblioteca pygame
 ```
 
 # Executando o jogo
+
 <center>
+ 
 ![Tela inicial do jogo](https://github.com/KalvinAlbuquerque/game/blob/main/.imgGit/telaImage.png)
+
 </center>
 
 ## IDE
@@ -39,8 +44,11 @@ Dentro do jogo, há um boneco 2D que pode ser controlado pelas setas do teclado 
 # Auto Player Mode
 O intuito principal dessa aplicação foi ensinar lógica de programação para alunos interessados em iniciar os estudos no mundo da programação. Para tal, criamos um "auto player mode" que basicamente é um script digitado pelo player - alunos. Dentro do main.py há uma função chamada ***"comandos()"***, nela podemos chamar funções que criamos para movimentar o jogador. 
 
-
+<center>
+ 
 ![Auto Player Mode](https://github.com/KalvinAlbuquerque/game/blob/main/.imgGit/autoPlayerMode.png)
+
+</center>
 
 Entre as funções criadas para tal fim, há:
 
@@ -55,8 +63,11 @@ Entre as funções criadas para tal fim, há:
 Novamente, como o intuito é ensinar, a lógica do auto player mode foi pensada para se utilizar laços de repetições e expressões condicionais. Portanto, pode-se e deve criar expressões como: while(!temLavaNaFrente()): andar_para_direita(). 
 
 ## Habilitando o modo de piloto automático
+
 <center>
+ 
 ![Tela inicial do jogo](https://github.com/KalvinAlbuquerque/game/blob/main/.imgGit/telaImage.png)
+
 </center>
 
 Uma vez digitado o código script, rode o game e na tela inicial clique no botão "OFF" no canto superior direito para que ele habilite esse modo.
