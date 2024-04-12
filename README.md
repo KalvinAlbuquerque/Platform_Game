@@ -4,7 +4,7 @@ Jogo desenvolvido com o intuito de ensinar lógica de programação para aspiran
 
 ![Main Image](https://github.com/KalvinAlbuquerque/game/blob/main/.imgGit/mainImage.png)
 
-# REQUISITOS
+# Requisitos
 Essa aplicação foi desenvolvida em ambiente Linux e não testada em Windows ou MacOS. 
 
 Para rodar essa aplicação é necessária a instalação da biblioteca pygame. Para tal basta seguir os seguintes comandos:
@@ -16,13 +16,13 @@ pip3 install pygame #Instalando a biblioteca pygame
 
 ```
 
-# EXECUTANDO
+# Executando o jogo
 ![Tela inicial do jogo](https://github.com/KalvinAlbuquerque/game/blob/main/.imgGit/telaImage.png)
 
 ## IDE
 Para executar o jogo basta clicar em "run", na sua IDE no arquivo main.py. 
 
-## TERMINAL
+## Terminal
 No terminal , acesse a pasta do game e rode o código:
 
 ```bash
@@ -32,7 +32,7 @@ python3 main.py
 Dentro do jogo, há um boneco 2D que pode ser controlado pelas setas do teclado e pular um bloco com a barra de espaço. Há moedas que podem ser coletadas ao passar por elas, monstros e lava que fazem com que o jogador vire um fantasminha ao tocá-los (morra =*( ). As fases são ultrapassadas quando o jogador alcança o portão.
 
 
-#AUTO PLAYER MODE
+# Auto Player Mode
 O intuito principal dessa aplicação foi ensinar lógica de programação para alunos interessados em iniciar os estudos no mundo da programação. Para tal, criamos um "auto player mode" que basicamente é um script digitado pelo player - alunos. Dentro do main.py há uma função chamada ***"comandos()"***, nela podemos chamar funções que criamos para movimentar o jogador. 
 
 
@@ -46,17 +46,17 @@ Entre as funções criadas para tal fim, há:
 
 Novamente, como o intuito é ensinar, a lógica do auto player mode foi pensada para se utilizar laços de repetições e expressões condicionais. Portanto, pode-se e deve criar expressões como: while(!temLavaNaFrente()): andar_para_direita(). 
 
-## HABILITANDO O AUTO PLAYER MODE
+## Habilitando o modo de piloto automático
 ![Tela inicial do jogo](https://github.com/KalvinAlbuquerque/game/blob/main/.imgGit/telaImage.png)
 
 Uma vez digitado o código script, rode o game e na tela inicial clique no botão "OFF" no canto superior direito para que ele habilite esse modo.
 
-#AUTORES
+# Autores
 A aplicação foi pensada e desenvolvida também pelos desenvolvedores e pesquisadores:
 [snttsz](https://github.com/snttsz)
 [AlnnvN](https://github.com/AlnnvN)
 
-#CONTRIBUIÇÃO
+# Contribuição
 Esse código foi baseado no código do Coding With Russ, disponível em seu site: [Coding_With_Russ](http://www.codingwithruss.com/gamepage/Platformer/).
 
 
