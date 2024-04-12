@@ -2,7 +2,9 @@
 
 Jogo desenvolvido com o intuito de ensinar lógica de programação para aspirantes à programação. O jogo conta com uma opção de "piloto automático" em que o jogador pode adicionar no código do jogo algo como "ande", "pule" dentro de laços de repetições e expressões condicionais. 
 
+<center>
 ![Main Image](https://github.com/KalvinAlbuquerque/game/blob/main/.imgGit/mainImage.png)
+</center>
 
 # Requisitos
 Essa aplicação foi desenvolvida em ambiente Linux e não testada em Windows ou MacOS. 
@@ -17,7 +19,9 @@ pip3 install pygame #Instalando a biblioteca pygame
 ```
 
 # Executando o jogo
+<center>
 ![Tela inicial do jogo](https://github.com/KalvinAlbuquerque/game/blob/main/.imgGit/telaImage.png)
+</center>
 
 ## IDE
 Para executar o jogo basta clicar em "run", na sua IDE no arquivo main.py. 
@@ -39,15 +43,21 @@ O intuito principal dessa aplicação foi ensinar lógica de programação para 
 ![Auto Player Mode](https://github.com/KalvinAlbuquerque/game/blob/main/.imgGit/autoPlayerMode.png)
 
 Entre as funções criadas para tal fim, há:
+
 1.***andar_para_direita(), andar_para_esquerda():*** como o nome diz, faz com que o jogador ande um bloco para esquerda/direita.
+
 2.***pular_para_esquerda(), pular_para_direita():*** como o nome diz, faz com que o jogador pule um bloco para esquerda/direita.
+
 3.***esperar():*** faz com que o jogador fique parado.
+
 4.***temBlocoNaFrente(), temLavaNaFrente(), temInimigoNaFrente(), temBuracoNaFrente():*** retorna "true" ou "false" caso haja o respectivo obstáculo um bloco a frente do jogador. Isso possibilita que o usuário possa praticar expressões condicionais. Como por exemplo: if temLavaNaFrente(): pular_para_direita(). 
 
 Novamente, como o intuito é ensinar, a lógica do auto player mode foi pensada para se utilizar laços de repetições e expressões condicionais. Portanto, pode-se e deve criar expressões como: while(!temLavaNaFrente()): andar_para_direita(). 
 
 ## Habilitando o modo de piloto automático
+<center>
 ![Tela inicial do jogo](https://github.com/KalvinAlbuquerque/game/blob/main/.imgGit/telaImage.png)
+</center>
 
 Uma vez digitado o código script, rode o game e na tela inicial clique no botão "OFF" no canto superior direito para que ele habilite esse modo.
 
