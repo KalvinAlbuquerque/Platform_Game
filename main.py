@@ -117,7 +117,14 @@ class Jogo():
         self.player.ESQUERDA = False
         self.player.JUMP = False
 
+
+
+
+
+
+
     def comandos(self):
+        #Programe aqui! 
         for i in range (0,20):
             self.andar_para_direita()
         for i in range(0,2):
@@ -126,7 +133,14 @@ class Jogo():
         for i in range(0,6):
             self.andar_para_direita
         
-        #Programe aqui! 
+
+
+
+
+
+
+
+
 
 #Inicializando as classes necessárias 
 
